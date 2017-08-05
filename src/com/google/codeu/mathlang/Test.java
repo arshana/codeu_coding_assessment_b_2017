@@ -233,6 +233,7 @@ final class Test {
     final StringBuilder builder = new StringBuilder();
 
     for (final String line : lines) {
+        System.out.println(line);
       builder.append(line).append("\n");
     }
 

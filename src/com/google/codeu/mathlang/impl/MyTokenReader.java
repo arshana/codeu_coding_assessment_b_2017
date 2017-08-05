@@ -16,6 +16,8 @@ package com.google.codeu.mathlang.impl;
 
 import java.io.IOException;
 
+import java.util.Scanner;
+
 import com.google.codeu.mathlang.core.tokens.Token;
 import com.google.codeu.mathlang.parsing.TokenReader;
 
@@ -27,11 +29,24 @@ import com.google.codeu.mathlang.parsing.TokenReader;
 // work with the test of the system.
 public final class MyTokenReader implements TokenReader {
 
+  private String source;
+
   public MyTokenReader(String source) {
     // Your token reader will only be given a string for input. The string will
     // contain the whole source (0 or more lines).
+    this.source = source.trim();
   }
 
+  // NEXT
+  //
+  // Get the next token in the stream. When the end of stream has been reached
+  // |next| should return |null|. The only valid tokens that can be returned are:
+  //  - com.google.codeu.mathlang.core.tokens.StringToken
+  //  - com.google.codeu.mathlang.core.tokens.NameToken
+  //  - com.google.codeu.mathlang.core.tokens.SymbolToken
+  //  - com.google.codeu.mathlang.core.tokens.NumberToken
+  // If there is ever a problem with the source data, |next| should throw an
+  // IOException.
   @Override
   public Token next() throws IOException {
     // Most of your work will take place here. For every call to |next| you should
@@ -40,7 +55,34 @@ public final class MyTokenReader implements TokenReader {
 
     // If for any reason you detect an error in the input, you may throw an IOException
     // which will stop all execution.
+    try {
+      Token retToken = null;
+      if (source.length > 0) {
+        if (!source.endsWith(";")){
+          throw new IOException();
+        }
+        String[] lines = source.split(";");
+        for(int i = 0; i < lines.length; i++){
+          String funcType = lines[i].substring(0, indexOf(' ')).trim();
+          String restOfLine = lines[i].substring(indexOf(' ')).trim();
+          if (funcType.equals("let")){
 
-    return null;
+          } else if(funcType.equals("note")){
+            if (!restOfLine.startsWith("\"")){
+              throw new IOException();
+            }
+
+          } else if(funcType.equals("print")){
+
+          } else{
+            throw new IOException();
+          }
+        }
+      }
+      return retToken;
+    }
+    catch (Exception ex){
+      throw new IOException();
+    }
   }
 }
